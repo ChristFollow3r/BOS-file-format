@@ -80,7 +80,7 @@ int raylib()
         {
             for (int j = 0; j < levelHeight; j++)
             {
-            	DrawCubeTexture(loadedTextures[floorMatrix[i][j]], { (float)i, (float)j, 0.0f }, 1.0f, 1.0f, 1.0f, WHITE);
+            	DrawCubeTexture(loadedTextures[floorMatrix[i][j]], { (float)j, 0, (float)i }, 1.0f, 1.0f, 1.0f, WHITE);
             }
         }
         EndMode3D();
