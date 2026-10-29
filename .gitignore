@@ -1,0 +1,5 @@
+﻿.idea/
+x64/
+*.exe
+*.pdb
+*.obj
