@@ -89,6 +89,20 @@ void Bomberman::run()
             }
         }
         
+        if (m_levelData.objects != nullptr)
+        {
+            for (int i = 0; i < m_levelData.width; i++)
+            {
+                for (int j = 0; j < m_levelData.height; j++)
+                {
+                    if (m_levelData.objects[i][j] == '1')
+                    {
+                        DrawSphere({(float)i, (float)1, (float)j}, .4f, RED);
+                    }
+                }
+            }
+        }
+        
         EndMode3D();
         DrawFPS(10, 10);
         EndDrawing();
