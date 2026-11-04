@@ -54,7 +54,7 @@ void Bomberman::run()
     {
         if (IsKeyPressed(KEY_P)) pause = !pause;
 
-        if (!pause) UpdateCamera(&camera, CAMERA_ORBITAL);
+        if (!pause) UpdateCamera(&camera, CAMERA_FIRST_PERSON);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -69,6 +69,21 @@ void Bomberman::run()
                     char texKey = m_levelData.floor[i][j];
                     if (m_loadedTextures.count(texKey)) {
                         DrawCubeTexture(m_loadedTextures[texKey], { (float)j, 0, (float)i }, 1.0f, 1.0f, 1.0f, WHITE);
+                    }
+                }
+            }
+        }
+        
+        if (m_levelData.map != nullptr)
+        {
+            for (int i = 0; i < m_levelData.width; i++)
+            {
+                for (int j = 0; j < m_levelData.height; j++)
+                {
+                    char texKey = m_levelData.map[i][j];
+                    if (m_loadedTextures.count(texKey))
+                    {
+                        DrawCubeTexture(m_loadedTextures[texKey], { (float)j, 1, (float)i }, 1.0f, 1.0f, 1.0f, WHITE);
                     }
                 }
             }
