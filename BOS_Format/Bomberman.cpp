@@ -54,11 +54,18 @@ void Bomberman::run()
     {
         if (IsKeyPressed(KEY_P)) pause = !pause;
 
-        if (!pause) UpdateCamera(&camera, CAMERA_FIRST_PERSON);
+        if (!pause) UpdateCamera(&camera, CAMERA_CUSTOM);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
+        
+        float dt = GetFrameTime();
+        
+        if (IsKeyDown(KEY_W)) playerPosition.x -= playerSpeed * dt;
+        if (IsKeyDown(KEY_S)) playerPosition.x += playerSpeed * dt;
+        if (IsKeyDown(KEY_D)) playerPosition.z -= playerSpeed * dt;
+        if (IsKeyDown(KEY_A)) playerPosition.z += playerSpeed * dt;
         
         if (m_levelData.floor != nullptr) 
         {
@@ -89,19 +96,7 @@ void Bomberman::run()
             }
         }
         
-        if (m_levelData.objects != nullptr)
-        {
-            for (int i = 0; i < m_levelData.width; i++)
-            {
-                for (int j = 0; j < m_levelData.height; j++)
-                {
-                    if (m_levelData.objects[i][j] == '1')
-                    {
-                        DrawSphere({(float)i, (float)1, (float)j}, .4f, RED);
-                    }
-                }
-            }
-        }
+        DrawSphere({playerPosition.x, (float)1, playerPosition.z}, .4f, RED);
         
         EndMode3D();
         DrawFPS(10, 10);
