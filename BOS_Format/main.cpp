@@ -97,7 +97,6 @@ int raylib()
     return 0;
 }
 
-////
 int main() {
 
 	if (!file.is_open()) {
@@ -152,13 +151,6 @@ int main() {
 
 		textures.insert({key[0], name});
 	}
-
-	//std::cout << header << "\n";
-	//std::cout << version << "\n";
-	//std::cout << title << "\n";
-	//std::cout << amountOfTextures << "\n";
-
-	//for (auto x : textures) std::cout << x.first << " " << x.second << "\n";
 
 	std::getline(file, line, ';');
 
@@ -290,7 +282,6 @@ int main() {
 
 }
 
-// RAFA CODE
 
 void DrawCubeTexture(Texture2D texture, Vector3 position, float width, float height, float length, Color color)
 {
