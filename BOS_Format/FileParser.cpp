@@ -4,7 +4,7 @@
 
 FileParser::FileParser(const std::string& filePath) : file(filePath)
 {
-    if (!file.is_open()) std::runtime_error("Couldn't open the file: " + filePath);
+    if (!file.is_open()) throw std::runtime_error("Couldn't open the file: " + filePath);
 }
 
 std::string FileParser::readField(char delim)
@@ -88,6 +88,7 @@ LevelData FileParser::parse()
     expect("OBJECTS");
     skipLine();
     data.objects = readGrid(data.width, data.height);
+    file.close();
     
     return data;
 }
