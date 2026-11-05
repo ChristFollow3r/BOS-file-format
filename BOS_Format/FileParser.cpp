@@ -50,7 +50,7 @@ LevelData FileParser::parse()
     LevelData data;
     
     expect("BOS");
-    readField(); // Version right here
+    data.title = readField();
     skipLine();
     
     expect("TITLE");
