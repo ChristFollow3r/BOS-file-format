@@ -47,7 +47,7 @@ void Bomberman::run()
 
     Camera camera = { 0 };
     camera.target     = mapCenter;
-    camera.position   = { mapCenter.x, 20.0f, mapCenter.z + 20.0f }; 
+    camera.position   = { mapCenter.x, 20.0f, mapCenter.z + 0.1f }; 
     camera.up         = { 0.0f, 1.0f, 0.0f };
     camera.fovy       = 13.0f;                  
     camera.projection = CAMERA_ORTHOGRAPHIC;
