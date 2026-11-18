@@ -15,6 +15,7 @@ public:
 
 private:
     LevelData m_levelData;
+    Music music;
     std::map<char, Texture2D> m_loadedTextures;
     Vector3 playerPosition = { 1.0f, 1.0f, 1.0f };
     float playerSpeed = 4.0f;

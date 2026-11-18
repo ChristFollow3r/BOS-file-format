@@ -22,12 +22,18 @@ void Bomberman::run()
 {
     const int screenWidth = 800;
     const int screenHeight = 450;
-
-    // Fallback title if LevelData title is empty
+    
     std::string windowTitle = m_levelData.title.empty() ? "Bomberman" : m_levelData.title;
     InitWindow(screenWidth, screenHeight, windowTitle.c_str());
-
-    // Load textures AFTER the window/OpenGL context exists
+    
+    InitAudioDevice();
+    
+    std::string musicFullPath = "resources/" + m_levelData.musicFilePath;
+    music = LoadMusicStream(musicFullPath.c_str());
+    if (!IsMusicValid(music)) throw std::runtime_error("Unable to load music. Audio file must be inside the resources directory");
+    
+    PlayMusicStream(music);
+    
     for (const auto& png : m_levelData.textures)
     {
         std::string pngName = "resources/" + png.second;
@@ -58,6 +64,7 @@ void Bomberman::run()
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_P)) pause = !pause;
+        UpdateMusicStream(music); // Fuck yeah!!!!
 
         if (!pause) UpdateCamera(&camera, CAMERA_CUSTOM);
 

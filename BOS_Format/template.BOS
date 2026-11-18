@@ -1,12 +1,13 @@
-BOS;0.5;;
+BOS;0.6;;
 TITLE;Nivel Clásico 11x11;;
+MUSIC;JDB_City_of_Night.mp3;;
 TEXTURES;5;;
 a;verdeOscuro.png;;
 b;verdeClaro.png;;
 c;ladrillo.png;;
 d;muro.png;;
 e;metal.png;;
-SIZE;11;11;;+
+SIZE;11;11;;
 FLOOR;;
 e;e;e;e;e;e;e;e;e;e;e;;
 e;a;b;a;b;a;b;a;b;a;e;;

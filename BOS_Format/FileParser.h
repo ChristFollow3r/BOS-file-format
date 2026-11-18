@@ -6,6 +6,8 @@
 struct LevelData
 {
         std::string title;
+        std::string version;
+        std::string musicFilePath;
         std::map<char, std::string> textures;
         int width = 0, height = 0;
         

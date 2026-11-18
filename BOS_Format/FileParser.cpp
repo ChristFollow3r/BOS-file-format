@@ -1,4 +1,6 @@
 ﻿#include "FileParser.h"
+
+#include <iostream>
 #include <stdexcept>
 
 
@@ -50,12 +52,19 @@ LevelData FileParser::parse()
     LevelData data;
     
     expect("BOS");
-    data.title = readField();
+    data.version = readField();
     skipLine();
     
     expect("TITLE");
     data.title = readField();
     skipLine();
+    
+    if (std::stof(data.version) >= 0.6)
+    {
+        expect("MUSIC");
+        data.musicFilePath = readField();
+        skipLine();
+    }
     
     expect("TEXTURES");
     int textureCount = readInt();
