@@ -5,14 +5,14 @@
 #include <cmath>
 
 Bomberman::Bomberman(const LevelData& levelData) 
-    : m_levelData(levelData)
+    : levelData(levelData)
 {
 }
 
 Bomberman::~Bomberman()
 {
     // Clean up Raylib resources on destruction
-    for (auto& t : m_loadedTextures) {
+    for (auto& t : loadedTextures) {
         UnloadTexture(t.second);
     }
     CloseWindow();
@@ -23,40 +23,39 @@ void Bomberman::run()
     const int screenWidth = 800;
     const int screenHeight = 450;
     
-    std::string windowTitle = m_levelData.title.empty() ? "Bomberman" : m_levelData.title;
+    std::string windowTitle = levelData.title.empty() ? "Bomberman" : levelData.title;
     InitWindow(screenWidth, screenHeight, windowTitle.c_str());
     
     InitAudioDevice();
     
-    std::string musicFullPath = "resources/" + m_levelData.musicFilePath;
+    std::string musicFullPath = "resources/" + levelData.musicFilePath;
     music = LoadMusicStream(musicFullPath.c_str());
     if (!IsMusicValid(music)) throw std::runtime_error("Unable to load music. Audio file must be inside the resources directory");
     
     PlayMusicStream(music);
     
-    for (const auto& png : m_levelData.textures)
+    for (const auto& png : levelData.textures)
     {
         std::string pngName = "resources/" + png.second;
         Image tempImage = LoadImage(pngName.c_str());
         Texture2D tempTexture = LoadTextureFromImage(tempImage);
         UnloadImage(tempImage);
 
-        if (tempTexture.id == 0)
-            std::cerr << "Failed to load texture: " << pngName << "\n";
+        if (tempTexture.id == 0) std::cerr << "Failed to load texture: " << pngName << "\n";
 
-        m_loadedTextures[png.first] = tempTexture;
+        loadedTextures[png.first] = tempTexture;
     }
     
-    float centerX = (m_levelData.height - 1) / 2.0f;
-    float centerZ = (m_levelData.width  - 1) / 2.0f;
+    float centerX = (levelData.height - 1) / 2.0f;
+    float centerZ = (levelData.width  - 1) / 2.0f;
     Vector3 mapCenter = { centerX, 0.5f, centerZ };
 
     Camera camera = { 0 };
     camera.target     = mapCenter;
-    camera.position   = { mapCenter.x, 20.0f, mapCenter.z + 0.1f }; 
+    camera.position   = { mapCenter.x, 12.0f, mapCenter.z + 8 }; 
     camera.up         = { 0.0f, 1.0f, 0.0f };
-    camera.fovy       = 13.0f;                  
-    camera.projection = CAMERA_ORTHOGRAPHIC;
+    camera.fovy       = 45.0f;                  
+    camera.projection = CAMERA_PERSPECTIVE;
 
     bool pause = false;
 
@@ -64,7 +63,7 @@ void Bomberman::run()
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_P)) pause = !pause;
-        UpdateMusicStream(music); // Fuck yeah!!!!
+        UpdateMusicStream(music);
 
         if (!pause) UpdateCamera(&camera, CAMERA_CUSTOM);
 
@@ -90,30 +89,30 @@ void Bomberman::run()
         if (!CollidesAt(nextPosition.x, playerPosition.z)) playerPosition.x = nextPosition.x;
         if (!CollidesAt(playerPosition.x, nextPosition.z)) playerPosition.z = nextPosition.z;
         
-        if (m_levelData.floor != nullptr) 
+        if (levelData.floor != nullptr) 
         {
-            for (int i = 0; i < m_levelData.width; i++)
+            for (int i = 0; i < levelData.width; i++)
             {
-                for (int j = 0; j < m_levelData.height; j++)
+                for (int j = 0; j < levelData.height; j++)
                 {
-                    char texKey = m_levelData.floor[i][j];
-                    if (m_loadedTextures.count(texKey)) {
-                        DrawCubeTexture(m_loadedTextures[texKey], { (float)j, 0, (float)i }, 1.0f, 1.0f, 1.0f, WHITE);
+                    char texKey = levelData.floor[i][j];
+                    if (loadedTextures.count(texKey)) {
+                        DrawCubeTexture(loadedTextures[texKey], { (float)j, 0, (float)i }, 1.0f, 1.0f, 1.0f, WHITE);
                     }
                 }
             }
         }
         
-        if (m_levelData.map != nullptr)
+        if (levelData.map != nullptr)
         {
-            for (int i = 0; i < m_levelData.width; i++)
+            for (int i = 0; i < levelData.width; i++)
             {
-                for (int j = 0; j < m_levelData.height; j++)
+                for (int j = 0; j < levelData.height; j++)
                 {
-                    char texKey = m_levelData.map[i][j];
-                    if (m_loadedTextures.count(texKey))
+                    char texKey = levelData.map[i][j];
+                    if (loadedTextures.count(texKey))
                     {
-                        DrawCubeTexture(m_loadedTextures[texKey], { (float)j, 1, (float)i }, 1.0f, 1.0f, 1.0f, WHITE);
+                        DrawCubeTexture(loadedTextures[texKey], { (float)j, 1, (float)i }, 1.0f, 1.0f, 1.0f, WHITE);
                     }
                 }
             }
@@ -137,10 +136,10 @@ void Bomberman::run()
                 int pX = (int)std::round(bomb.bombPosition.x);
                 int pZ = (int)std::round(bomb.bombPosition.z);
                 
-                for (int i = -1; i <= 2; i++)
+                for (int i = -1; i <= 1; i++)
                 {
-                    if (m_levelData.collisions[pX + i][pZ] != '1') ExplodeAt(pX + i, pZ);
-                    if (m_levelData.collisions[pX][pZ + i] != '1')ExplodeAt(pX, pZ + i);
+                    if (levelData.collisions[pZ][pX + i] != '1') ExplodeAt(pX + i, pZ);
+                    if (levelData.collisions[pZ + i][pX] != '1') ExplodeAt(pX, pZ + i);
                 }
                 
             }
@@ -152,7 +151,7 @@ void Bomberman::run()
         }
         
         EndMode3D();
-        DrawText(m_levelData.title.c_str(), camera.position.x, camera.position.y, 20, BLACK);
+        DrawText(levelData.title.c_str(), camera.position.x + screenWidth / 2 - 100, camera.position.y, 20, BLACK);
         DrawFPS(10, 10);
         EndDrawing();
     }
@@ -296,8 +295,8 @@ bool Bomberman::IsBlocked(float x, float z)
     int col = (int)std::round(x);
     int row = (int)std::round(z);
     
-    if (col < 0 || row < 0 || row >= m_levelData.width || col >= m_levelData.height) return true;
-    return m_levelData.collisions[row][col] == '1' || m_levelData.collisions[row][col] == 'D';
+    if (col < 0 || row < 0 || row >= levelData.width || col >= levelData.height) return true;
+    return levelData.collisions[row][col] == '1' || levelData.collisions[row][col] == 'D';
 }
 
 bool Bomberman::CollidesAt(float x, float z)
@@ -309,11 +308,11 @@ bool Bomberman::CollidesAt(float x, float z)
 
 void Bomberman::ExplodeAt(int x, int z)
 {
-    if (x < 0 || z < 0 || z >= m_levelData.width || x >= m_levelData.height) return;
-    if (m_levelData.collisions[z][x] == 'D')
+    if (x < 0 || z < 0 || z >= levelData.width || x >= levelData.height) return;
+    if (levelData.collisions[z][x] == 'D')
     {
-        m_levelData.collisions[z][x] = '0';
-        m_levelData.map[z][x] = '0';
+        levelData.collisions[z][x] = '0';
+        levelData.map[z][x] = '0';
     }
     DrawCube({ (float)x, 1.0f, (float)z }, 1.0f, 1.0f, 1.0f, ORANGE);
 }
