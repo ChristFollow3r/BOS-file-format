@@ -78,8 +78,8 @@ LevelData FileParser::parse()
     }
     
     expect("SIZE");
-    data.width = readInt();
     data.height = readInt();
+    data.width = readInt();
     skipLine();
     
     expect("FLOOR");
