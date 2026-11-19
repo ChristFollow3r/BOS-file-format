@@ -98,6 +98,7 @@ LevelData FileParser::parse()
     skipLine();
     data.objects = readGrid(data.width, data.height);
     file.close();
+    std::cout << "Successfully loaded file!";
     
     return data;
 }

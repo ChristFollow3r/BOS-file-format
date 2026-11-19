@@ -91,9 +91,9 @@ void Bomberman::run()
         
         if (levelData.floor != nullptr) 
         {
-            for (int i = 0; i < levelData.width; i++)
+            for (int i = 0; i < levelData.height; i++)
             {
-                for (int j = 0; j < levelData.height; j++)
+                for (int j = 0; j < levelData.width; j++)
                 {
                     char texKey = levelData.floor[i][j];
                     if (loadedTextures.count(texKey)) {
@@ -105,9 +105,9 @@ void Bomberman::run()
         
         if (levelData.map != nullptr)
         {
-            for (int i = 0; i < levelData.width; i++)
+            for (int i = 0; i < levelData.height; i++)
             {
-                for (int j = 0; j < levelData.height; j++)
+                for (int j = 0; j < levelData.width; j++)
                 {
                     char texKey = levelData.map[i][j];
                     if (loadedTextures.count(texKey))
@@ -295,7 +295,7 @@ bool Bomberman::IsBlocked(float x, float z)
     int col = (int)std::round(x);
     int row = (int)std::round(z);
     
-    if (col < 0 || row < 0 || row >= levelData.width || col >= levelData.height) return true;
+    if (col < 0 || row < 0 || row >= levelData.height || col >= levelData.width) return true;
     return levelData.collisions[row][col] == '1' || levelData.collisions[row][col] == 'D';
 }
 
@@ -308,7 +308,7 @@ bool Bomberman::CollidesAt(float x, float z)
 
 void Bomberman::ExplodeAt(int x, int z)
 {
-    if (x < 0 || z < 0 || z >= levelData.width || x >= levelData.height) return;
+    if (x < 0 || z < 0 || z >= levelData.height || x >= levelData.width) return;
     if (levelData.collisions[z][x] == 'D')
     {
         levelData.collisions[z][x] = '0';
