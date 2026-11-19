@@ -9,7 +9,7 @@ struct LevelData
         std::string version;
         std::string musicFilePath;
         std::map<char, std::string> textures;
-        int width = 0, height = 0;
+        int rows = 0, columns = 0;
         
         char** floor = nullptr;
         char** map = nullptr;

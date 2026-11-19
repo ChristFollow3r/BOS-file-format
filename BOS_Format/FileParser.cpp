@@ -78,25 +78,25 @@ LevelData FileParser::parse()
     }
     
     expect("SIZE");
-    data.height = readInt();
-    data.width = readInt();
+    data.columns = readInt();
+    data.rows = readInt();
     skipLine();
     
     expect("FLOOR");
     skipLine();
-    data.floor = readGrid(data.width, data.height);
+    data.floor = readGrid(data.columns, data.rows);
     
     expect("MAP");
     skipLine();
-    data.map = readGrid(data.width, data.height);
+    data.map = readGrid(data.columns, data.rows);
     
     expect("COLLISIONS");
     skipLine();
-    data.collisions = readGrid(data.width, data.height);
+    data.collisions = readGrid(data.columns, data.rows);
     
     expect("OBJECTS");
     skipLine();
-    data.objects = readGrid(data.width, data.height);
+    data.objects = readGrid(data.columns, data.rows);
     file.close();
     std::cout << "Successfully loaded file!";
     
