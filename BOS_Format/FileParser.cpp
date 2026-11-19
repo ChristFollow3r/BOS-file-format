@@ -97,6 +97,13 @@ LevelData FileParser::parse()
     expect("OBJECTS");
     skipLine();
     data.objects = readGrid(data.columns, data.rows);
+    for (int i = 0; i < data.rows; i++)
+    {
+        for (int j = 0; j < data.columns; j++)
+        {
+            if (data.objects[i][j] == '1') data.playerSpawnPosition = { (float)j, 1, (float)i };
+        }
+    }
     file.close();
     std::cout << "Successfully loaded file!";
     

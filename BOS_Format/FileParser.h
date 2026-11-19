@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <fstream>
+#include <raylib.h>
 
 struct LevelData
 {
@@ -9,6 +10,7 @@ struct LevelData
         std::string version;
         std::string musicFilePath;
         std::map<char, std::string> textures;
+        Vector3 playerSpawnPosition;
         int rows = 0, columns = 0;
         
         char** floor = nullptr;

@@ -56,6 +56,8 @@ void Bomberman::run()
     camera.up         = { 0.0f, 1.0f, 0.0f };
     camera.fovy       = 45.0f;                  
     camera.projection = CAMERA_PERSPECTIVE;
+    
+    playerPosition = levelData.playerSpawnPosition;
 
     bool pause = false;
 
@@ -91,9 +93,9 @@ void Bomberman::run()
         
         if (levelData.floor != nullptr) 
         {
-            for (int i = 0; i < levelData.columns; i++)
+            for (int i = 0; i < levelData.rows; i++)
             {
-                for (int j = 0; j < levelData.rows; j++)
+                for (int j = 0; j < levelData.columns; j++)
                 {
                     char texKey = levelData.floor[i][j];
                     if (loadedTextures.count(texKey)) {
@@ -105,9 +107,9 @@ void Bomberman::run()
         
         if (levelData.map != nullptr)
         {
-            for (int i = 0; i < levelData.columns; i++)
+            for (int i = 0; i < levelData.rows; i++)
             {
-                for (int j = 0; j < levelData.rows; j++)
+                for (int j = 0; j < levelData.columns; j++)
                 {
                     char texKey = levelData.map[i][j];
                     if (loadedTextures.count(texKey))
@@ -138,8 +140,8 @@ void Bomberman::run()
                 
                 for (int i = -1; i <= 1; i++)
                 {
-                    if (levelData.collisions[pZ][pX + i] != '1') ExplodeAt(pX + i, pZ);
-                    if (levelData.collisions[pZ + i][pX] != '1') ExplodeAt(pX, pZ + i);
+                    ExplodeAt(pX + i, pZ);
+                    ExplodeAt(pX, pZ + i);
                 }
                 
             }
@@ -295,7 +297,7 @@ bool Bomberman::IsBlocked(float x, float z)
     int col = (int)std::round(x);
     int row = (int)std::round(z);
     
-    if (col < 0 || row < 0 || row >= levelData.columns || col >= levelData.rows) return true;
+    if (col < 0 || row < 0 || row >= levelData.rows || col >= levelData.columns) return true;
     return levelData.collisions[row][col] == '1' || levelData.collisions[row][col] == 'D';
 }
 
@@ -308,7 +310,8 @@ bool Bomberman::CollidesAt(float x, float z)
 
 void Bomberman::ExplodeAt(int x, int z)
 {
-    if (x < 0 || z < 0 || z >= levelData.columns || x >= levelData.rows) return;
+    if (x < 0 || z < 0 || z >= levelData.rows || x >= levelData.columns) return;
+    if (levelData.collisions[z][x] == '1') return;
     if (levelData.collisions[z][x] == 'D')
     {
         levelData.collisions[z][x] = '0';
